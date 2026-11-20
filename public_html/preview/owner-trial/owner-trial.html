@@ -1,0 +1,201 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FT360 private owner trial</title>
+<script>
+// Page-level request log + block switch (defense in depth; the real boundary is
+// the offline step below + server CSP header). Covers page-context
+// fetch/XHR/beacon/WebSocket/EventSource only.
+window.__netlog=[]; window.__netblock=false;
+function nl(kind,url){ window.__netlog.push((window.__netblock?'BLOCKED ':'')+kind+' '+url); renderNet(); }
+function renderNet(){ const el=document.getElementById('netlog'); if(el) el.textContent=window.__netlog.join('\n')||'(no page-level requests yet)'; }
+const _f=window.fetch; window.fetch=function(u,o){ nl('fetch',String(u&&u.url||u)); if(window.__netblock) return Promise.reject(new Error('network disabled')); return _f.apply(this,arguments); };
+const _xo=XMLHttpRequest.prototype.open; XMLHttpRequest.prototype.open=function(m,u){ nl('xhr',String(u)); this.__u=u; return _xo.apply(this,arguments); };
+const _xs=XMLHttpRequest.prototype.send; XMLHttpRequest.prototype.send=function(){ if(window.__netblock){ nl('xhr-send',String(this.__u)); const t=this; setTimeout(()=>{ if(t.onerror) t.onerror(new Error('network disabled')); },0); return; } return _xs.apply(this,arguments); };
+const _sb=navigator.sendBeacon?navigator.sendBeacon.bind(navigator):null; if(_sb) navigator.sendBeacon=function(u){ nl('beacon',String(u)); if(window.__netblock) return false; return _sb.apply(navigator,arguments); };
+const _ws=window.WebSocket; window.WebSocket=function(u){ nl('websocket',String(u)); if(window.__netblock) throw new Error('network disabled'); return new _ws(u); };
+const _es=window.EventSource; if(_es) window.EventSource=function(u){ nl('eventsource',String(u)); if(window.__netblock) throw new Error('network disabled'); return new _es(u); };
+</script>
+<script src="vendor/tf.min.js"></script>
+<script src="vendor/face-api.js"></script>
+<script src="vendor/zxing.js"></script>
+<script src="vendor/tesseract.min.js"></script>
+<style>
+body{font-family:sans-serif;max-width:820px;margin:14px auto;color:#222;padding:0 10px}
+.warn{background:#fff3cd;padding:12px;border:1px solid #e0a800;border-radius:8px}
+.okb{background:#e8f5e9;padding:10px;border:1px solid #4caf50;border-radius:8px}
+.case{border:1px solid #ccc;border-radius:8px;padding:12px;margin:12px 0}
+.pair{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}
+.pair img{max-width:220px;max-height:220px;border:1px solid #ddd}
+pre{background:#f4f4f4;padding:10px;white-space:pre-wrap;font-size:12px;max-height:220px;overflow:auto}
+.verdict{font-weight:bold}.ok{color:#0a7a0a}.bad{color:#b00020}.note{color:#8a6d00}
+button{font-size:16px;padding:10px 18px}
+input[type=file]{display:block;margin:6px 0}
+details{margin-top:10px}
+</style></head><body>
+<h2>FT360 private owner trial</h2>
+<div class="warn"><b>Private trial: no upload, no intentional saving.</b> This page asks you to go fully offline BEFORE you pick any photo, and the whole check then runs with no connection at all. Your photos and results are not uploaded and are not intentionally stored anywhere. Press Reset to clear them, and close this tab before going back online.</div>
+<div class="warn" style="margin-top:8px"><b>What this trial can and cannot show.</b> It shows whether the free matching tools work with your real license and your real face: barcode read, an issuer-code signal, front-text read, face comparison. It does NOT prove the card is genuine (a fake card can carry a valid barcode), does NOT prove a live person (no liveness check), and a browser match score is a signal, not identity verification. Reading a photographed license barcode and matching a small printed ID photo against a phone selfie are the two things this trial is genuinely testing - results here are real-world evidence, good or bad.</div>
+<div class="case"><h3>Step 1 - components</h3><div id="loadstatus">loading...</div></div>
+<div class="case" id="gate" style="display:none"><h3>Step 2 - go offline</h3>
+<p>Now disconnect this device: turn on <b>airplane mode</b> AND switch <b>Wi-Fi off</b> (airplane mode can leave Wi-Fi on).</p>
+<p><button id="offlineBtn">I am offline - enable photo selection</button></p>
+<p style="font-size:13px" class="note">This button is your confirmation; a web page cannot check your connection by itself. Photo selection stays locked until you confirm, and the check runs entirely while disconnected.</p></div>
+<div class="case" id="pick" style="display:none"><h3>Step 3 - choose your photos (offline)</h3>
+<p>License <b>back</b> (the barcode side): lay the card flat, bright even light, no glare, fill the frame with the barcode.<input type="file" id="fback" accept="image/*"></p>
+<p>License <b>front</b> (photo side): flat, no glare.<input type="file" id="ffront" accept="image/*"></p>
+<p>A fresh <b>selfie</b>: face the camera, good light, no sunglasses.<input type="file" id="fself" accept="image/*"></p>
+<p><button id="run" disabled>Run the private check</button> <button id="reset" style="font-size:14px">Reset (clear photos and results)</button></p></div>
+<div id="out"></div>
+<details><summary>Request log - page-level calls (fetch/XHR/beacon/socket). Images, scripts and workers are covered by the offline step and server content policy, not this log.</summary><pre id="netlog"></pre></details>
+<script>
+let tessWorker=null, ocrSpent=false, currentRun=0;
+let __objUrls=[];
+function setStatus(node){ const el=document.getElementById('loadstatus'); el.textContent=''; el.appendChild(node); }
+function statusText(s){ const d=document.createElement('div'); d.textContent=s; setStatus(d); }
+async function toImg(file){
+  try{ const bmp=await createImageBitmap(file,{imageOrientation:'from-image'}); const c=document.createElement('canvas'); c.width=bmp.width; c.height=bmp.height; c.getContext('2d').drawImage(bmp,0,0); bmp.close&&bmp.close(); return c; }
+  catch(e){ const i=new Image(); const u=URL.createObjectURL(file); __objUrls.push(u); i.src=u; await i.decode(); const c=document.createElement('canvas'); c.width=i.naturalWidth; c.height=i.naturalHeight; c.getContext('2d').drawImage(i,0,0); return c; }
+}
+function scaled(canvas,w){ const s=Math.min(1,w/canvas.width); const c=document.createElement('canvas'); c.width=Math.round(canvas.width*s); c.height=Math.round(canvas.height*s); c.getContext('2d').drawImage(canvas,0,0,c.width,c.height); return c; }
+// AAMVA DL/ID card format: compliance marker, header record, 6-digit numeric
+// IIN, version/entry digits, DL or ID subfile designator, and DAQ element.
+function parseAamva(txt){
+ if(typeof txt!=='string'||txt.length<20||txt.length>4096) return {ok:false};
+ const m=txt.match(/^@\n\x1e\rANSI (\d{6})\d{6}(DL|ID)\d{8}/);
+ if(!m) return {ok:false};
+ if(txt.indexOf('DAQ')<0) return {ok:false};
+ const dm=txt.match(/DAJ([A-Z]{2})/); const daj=dm&&/^[A-Z]{2}$/.test(dm[1])?dm[1]:null;
+ return {ok:true, iin:m[1], daj:daj};
+}
+async function storageAudit(){
+ const r={localStorage:'?',sessionStorage:'?',indexedDB:'?',cacheStorage:'?'};
+ try{ r.localStorage=String(localStorage.length); }catch(e){ r.localStorage='blocked'; }
+ try{ r.sessionStorage=String(sessionStorage.length); }catch(e){ r.sessionStorage='blocked'; }
+ try{
+  if(indexedDB.databases){ const dbs=await indexedDB.databases(); r.indexedDB=(dbs&&dbs.length)?dbs.length+' database(s) present':'none'; }
+  else r.indexedDB='check unavailable in this browser';
+ }catch(e){ r.indexedDB='check unavailable'; }
+ try{
+  if(window.caches&&caches.keys){ const ks=await caches.keys(); r.cacheStorage=(ks&&ks.length)?ks.length+' cache(s) present':'none'; }
+  else r.cacheStorage='check unavailable in this browser';
+ }catch(e){ r.cacheStorage='check unavailable'; }
+ return r;
+}
+async function boot(){
+ try{
+  await faceapi.tf.setBackend('cpu'); await faceapi.tf.ready();
+  await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri('models'),faceapi.nets.faceLandmark68Net.loadFromUri('models'),faceapi.nets.faceRecognitionNet.loadFromUri('models')]);
+  statusText('face components ready, loading text reader...');
+  try{
+   tessWorker=await Tesseract.createWorker('eng',1,{workerPath:'vendor/worker.min.js',corePath:'vendor/tesseract-core-simd.wasm.js',langPath:'tessdata',gzip:false,cacheMethod:'none'});
+  }catch(e){ tessWorker=null; }
+  window.__netblock=true;
+  const mm=document.createElement('meta'); mm.httpEquiv='Content-Security-Policy';
+  mm.content="default-src 'none'; img-src data: blob:; style-src 'unsafe-inline'; connect-src 'none'; worker-src blob:";
+  document.head.appendChild(mm);
+  statusText('components ready'+(tessWorker?'':' (text reader unavailable; barcode and face checks still work)'));
+  document.getElementById('gate').style.display='block';
+ }catch(e){ statusText('Component load failed. Please reload while online.'); }
+}
+document.getElementById('offlineBtn').onclick=()=>{
+ document.getElementById('gate').style.display='none';
+ document.getElementById('pick').style.display='block';
+ const upd=()=>{ document.getElementById('run').disabled=!(fback.files[0]&&ffront.files[0]&&fself.files[0]); };
+ fback.onchange=ffront.onchange=fself.onchange=upd; upd();
+};
+document.getElementById('reset').onclick=async()=>{
+ currentRun++; // cancels any in-flight run: stale stages stop before touching the page
+ if(tessWorker){ try{ await tessWorker.terminate(); }catch(e){} tessWorker=null; ocrSpent=true; }
+ for(const u of __objUrls){ try{ URL.revokeObjectURL(u); }catch(e){} }
+ __objUrls=[];
+ document.getElementById('out').innerHTML='';
+ fback.value=''; ffront.value=''; fself.value='';
+ const rb=document.getElementById('run'); rb.disabled=true; rb.textContent='Run the private check';
+ const d=document.createElement('div'); d.className='case';
+ d.textContent='Cleared: selections and results cleared and any running check cancelled.'+(ocrSpent?' The text reader was stopped and stays off for this session; to use it again, close this tab, go back online, and reopen the page.':'')+' Close this tab before going back online.';
+ document.getElementById('out').appendChild(d);
+};
+document.getElementById('run').onclick=async()=>{
+ const g=++currentRun;
+ const alive=()=>g===currentRun;
+ document.getElementById('out').innerHTML='';
+ const run=document.getElementById('run'); run.disabled=true; run.textContent='working...';
+ const mk=(title,imgUrls)=>{
+   const d=document.createElement('div'); d.className='case';
+   const h=document.createElement('h3'); h.textContent=title; d.appendChild(h);
+   const pair=document.createElement('div'); pair.className='pair';
+   for(const u of imgUrls){ const im=document.createElement('img'); im.src=u; pair.appendChild(im); }
+   d.appendChild(pair); document.getElementById('out').appendChild(d); return d;
+ };
+ const line=(parent,cls,txt)=>{ const v=document.createElement('div'); if(cls) v.className=cls; v.textContent=txt; parent.appendChild(v); return v; };
+ try{
+  const [cBack,cFront,cSelf]=await Promise.all([toImg(fback.files[0]),toImg(ffront.files[0]),toImg(fself.files[0])]);
+  if(!alive()) return;
+  const uBack=cBack.toDataURL(),uFront=cFront.toDataURL(),uSelf=cSelf.toDataURL();
+  // ---- barcode / issuer-code signal ----
+  const bSec=mk('License back: barcode read',[uBack]);
+  try{
+   const reader=new ZXing.BrowserMultiFormatReader(); let txt=null;
+   for(const w of [1600,1100,800]){ if(!alive()) return; try{ const im=new Image(); im.src=scaled(cBack,w).toDataURL(); await im.decode(); txt=(await reader.decodeFromImage(im)).getText(); break; }catch(e){} }
+   if(!alive()) return;
+   if(!txt) throw new Error('nodecode');
+   const p=parseAamva(txt);
+   if(!p.ok){
+     line(bSec,'verdict note','Barcode decoded but its content is not a recognized driver-license format - issuer-code signal unknown.');
+   } else if(p.iin==='636036'){
+     line(bSec,'verdict ok','Barcode issuer-code signal: card carries issuer code 636036, the code AAMVA assigns to New Jersey.');
+     line(bSec,null,'Address state printed on card: '+(p.daj||'not found')+' (the printed address never decides the issuing state)');
+   } else {
+     line(bSec,'verdict note','Barcode issuer-code signal: card carries issuer code '+p.iin+', which does not match the New Jersey code 636036.');
+     line(bSec,null,'Address state printed on card: '+(p.daj||'not found')+' (the printed address never decides the issuing state)');
+   }
+  }catch(e){
+   if(e.message==='nodecode') line(bSec,'verdict bad','Could not read the barcode from this photo - issuer-code signal unknown. This is one of the real-world unknowns being tested: try the card flat, glare-free, barcode filling the frame. Scanner hardware does this more reliably than a phone photo.');
+   else line(bSec,'verdict bad','Barcode check failed - issuer-code signal unknown.');
+  }
+  // ---- OCR front (secondary signal) ----
+  if(!alive()) return;
+  const oSec=mk('License front: text read (secondary signal only)',[uFront]);
+  if(tessWorker){
+   try{
+    const t0=Date.now(); const job=tessWorker.recognize(scaled(cFront,1400));
+    const {data}=await job;
+    if(!alive()) return;
+    const nj=/new jersey/i.test(data&&data.text||'');
+    line(oSec,'verdict '+(nj?'ok':'note'),((Date.now()-t0)/1000).toFixed(1)+'s - '+(nj?'found "NEW JERSEY" in the front text':'did not find "NEW JERSEY" in the front text'));
+    line(oSec,'note','Text read is a weak secondary signal only; the barcode issuer code above is the primary signal.');
+   }catch(e){ if(alive()) line(oSec,'verdict bad','Text read failed on this photo. The barcode issuer code above is the primary signal.'); }
+  } else line(oSec,'note',ocrSpent?'Text reader was stopped by a Reset this session; close this tab, go back online, and reopen the page to use it again.':'Text reader not available in this session.');
+  // ---- face match ----
+  if(!alive()) return;
+  const fSec=mk('Face comparison: license photo vs selfie',[uFront,uSelf]);
+  try{
+   const opt=new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.3});
+   const d1=await faceapi.detectSingleFace(cFront,opt).withFaceLandmarks().withFaceDescriptor();
+   if(!alive()) return;
+   const d2=await faceapi.detectSingleFace(cSelf,opt).withFaceLandmarks().withFaceDescriptor();
+   if(!alive()) return;
+   if(!d1||!d2) throw new Error(!d1?'nofacefront':'nofaceself');
+   const dist=faceapi.euclideanDistance(d1.descriptor,d2.descriptor);
+   if(!isFinite(dist)) throw new Error('calc');
+   line(fSec,'verdict '+(dist<0.6?'ok':'note'),'distance '+dist.toFixed(3)+' -> '+(dist<0.6?'MATCH':'no match')+' at the library default threshold 0.6');
+   line(fSec,'note','This threshold is a default, not tuned. Matching a small printed ID photo to a phone selfie is exactly what this trial measures - a wrong answer here is tuning evidence, not a verdict on you.');
+  }catch(e){
+   if(!alive()) return;
+   line(fSec,'verdict bad',e.message==='nofacefront'?'No face found in the license photo - try a sharper, closer front photo.':(e.message==='nofaceself'?'No face found in the selfie - try again facing the camera in good light.':'Face comparison failed on these photos.'));
+  }
+  // ---- done + storage audit ----
+  const audit=await storageAudit();
+  if(!alive()) return;
+  const done=document.createElement('div'); done.className='case';
+  const db=document.createElement('div'); db.className='okb';
+  db.textContent='Done. Everything above ran on this device while offline. No upload and no intentional saving of photos or results. Press Reset to clear selections and results, and close this tab before going back online. Reminder: this checks barcode/OCR/face-match mechanics on real images. It is not document-authenticity verification and not liveness.';
+  done.appendChild(db);
+  const al=document.createElement('div'); al.style.fontSize='12px'; al.style.marginTop='8px';
+  al.textContent='Browser storage check after run: localStorage '+audit.localStorage+', sessionStorage '+audit.sessionStorage+', IndexedDB '+audit.indexedDB+', CacheStorage '+audit.cacheStorage+'.';
+  done.appendChild(al);
+  document.getElementById('out').appendChild(done);
+ }catch(e){ if(!alive()) return; const d=document.createElement('div'); d.className='case'; const s=document.createElement('span'); s.className='bad'; s.textContent='Unexpected error. Press Reset or close the tab and try again.'; d.appendChild(s); document.getElementById('out').appendChild(d); }
+ if(alive()){ run.disabled=false; run.textContent='Run the private check'; }
+};
+boot();
+</script></body></html>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 120" role="img" aria-label="FinancialTherapy360 logo concept: full circle">
+  <circle cx="60" cy="60" r="40" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-dasharray="211 40" transform="rotate(-110 60 60)"/>
+  <path d="M55 19.5 L44.5 27 L48 16.5 Z" fill="#ffffff"/>
+  <path d="M38 74 L52 62 L62 68 L82 44" fill="none" stroke="#168b9e" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M73 43.5 L85 41 L79.5 53" fill="none" stroke="#168b9e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="126" y="70" font-family="Georgia, 'Times New Roman', serif" font-size="30" letter-spacing="-0.5" fill="#ffffff">FinancialTherapy<tspan fill="#168b9e">360</tspan></text>
+</svg>

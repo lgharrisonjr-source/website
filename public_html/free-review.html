@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Choose your free review | FinancialTherapy360</title>
+<meta content="Start with a free review from FinancialTherapy360. Choose one introductory review and create your secure account." name="description"/>
+<link href="assets/site.css?v=20261119k" rel="stylesheet"/>
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"></head>
+<body>
+<header class="site-header">
+<div class="wrap nav-wrap">
+<a class="brand" href="index.html"><img alt="FinancialTherapy360" height="72" src="assets/logo.svg" width="264"/></a>
+
+<nav aria-label="Primary" id="site-nav">
+<a href="how-it-works.html">How it works</a>
+<a href="what-we-review.html">What we review</a>
+<a href="about.html">About</a>
+<a href="faq.html">FAQ</a>
+<a href="donations.html">Community Support</a>
+<a href="contact.html">Contact</a>
+<div class="menu nav-menu" id="nav-settings"><button aria-controls="nav-settings-list" aria-expanded="false" aria-haspopup="true" id="nav-settings-btn" type="button">Account</button><div class="menu-list" id="nav-settings-list" hidden><div class="menu-name" id="nav-menu-name" hidden></div><button class="link" id="nav-personal" type="button" hidden>Personal Info</button><a class="link" id="nav-dashboard" href="login.html" hidden>Dashboard</a><a class="link" href="privacy.html">Privacy</a><button class="link" id="nav-loginlogout" type="button">Login</button></div></div></nav>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle">Menu</button>
+</div>
+</header><div role="note" style="padding:12px 20px;text-align:center;background:#fff4df;color:#433519">Beta preview. Account sign-up is open only to invited testers. Uploads, analysis and payments are not available to the public yet.</div>
+<main id="main"><section class="section"><div class="wrap" style="max-width:950px"><p>Try us out for Free! Select one free review on us.</p><h1>Start with what matters to you</h1><div class="card"><h2 style="font-size:36px">Choose one free review</h2><fieldset style="border:0;padding:0;margin:0;display:grid;grid-template-columns:1fr;gap:12px"><legend class="sr-only" style="position:absolute;left:-9999px">Choose one free review</legend>
+<label class="card fr-choice" style="display:flex;align-items:center;gap:12px;cursor:pointer;margin:0"><input type="radio" name="free-review" value="cable-bill" style="width:20px;height:20px;accent-color:#1f4d3a;flex:none"/><strong>Analyze Cable Bill</strong></label>
+<label class="card fr-choice" style="display:flex;align-items:center;gap:12px;cursor:pointer;margin:0"><input type="radio" name="free-review" value="phone-bill" style="width:20px;height:20px;accent-color:#1f4d3a;flex:none"/><strong>Analyze Phone Bill</strong></label>
+<label class="card fr-choice" style="display:flex;align-items:center;gap:12px;cursor:pointer;margin:0"><input type="radio" name="free-review" value="internet-bill" style="width:20px;height:20px;accent-color:#1f4d3a;flex:none"/><strong>Analyze Internet Bill</strong></label>
+<label class="card fr-choice" style="display:flex;align-items:center;gap:12px;cursor:pointer;margin:0"><input type="radio" name="free-review" value="pay-stub" style="width:20px;height:20px;accent-color:#1f4d3a;flex:none"/><strong>Analyze Pay Stub</strong></label>
+<label class="card fr-choice" style="display:flex;align-items:center;gap:12px;cursor:pointer;margin:0"><input type="radio" name="free-review" value="car-insurance-coverages" style="width:20px;height:20px;accent-color:#1f4d3a;flex:none"/><strong>Analyze Car Insurance Coverages</strong></label>
+<label class="card fr-choice" style="display:flex;align-items:center;gap:12px;cursor:pointer;margin:0"><input type="radio" name="free-review" value="home-insurance-coverages" style="width:20px;height:20px;accent-color:#1f4d3a;flex:none"/><strong>Analyze Home Insurance Coverages</strong></label>
+</fieldset><p style="margin-top:24px"><button class="btn" id="fr-next" type="button" disabled>Next</button></p></div><p>No payment method is requested. Additional review terms will be published before customer services open.</p></div></section></main>
+<footer class="site-footer">
+<div class="wrap">
+<p class="footer-tag">Helping everyone get more out of their finances.</p>
+<nav aria-label="Footer" class="footer-nav">
+<a href="how-it-works.html">How it works</a>
+<a href="what-we-review.html">What we review</a>
+<a href="about.html">About</a>
+<a href="faq.html">FAQ</a>
+<a href="donations.html">Community Support</a>
+<a href="contact.html">Contact</a>
+<a href="login.html">Login</a>
+</nav>
+<p class="footer-note">FinancialTherapy360 is in a restricted beta. Account sign-up is open only to invited testers. Document uploads, analysis and payments are not available to the public yet. This website is informational. It is not financial, tax, legal, insurance or investment advice.</p>
+<p class="footer-note">© 2026 FinancialTherapy360</p>
+</div>
+</footer>
+
+<script src="public-nav.js?v=20261119k" defer></script><script>
+(function () {
+  var next = document.getElementById("fr-next");
+  var radios = document.querySelectorAll('input[name="free-review"]');
+  radios.forEach(function (r) {
+    r.addEventListener("change", function () {
+      next.disabled = false;
+      document.querySelectorAll(".fr-choice").forEach(function (c) { c.style.outline = ""; });
+      r.closest(".fr-choice").style.outline = "2px solid #1f4d3a";
+    });
+  });
+  next.addEventListener("click", function () {
+    var sel = document.querySelector('input[name="free-review"]:checked');
+    if (!sel) return;
+    window.location.href = "login.html?v=20261119h&review=" + encodeURIComponent(sel.value) + "#create";
+  });
+})();
+</script>
+</body>
+</html>

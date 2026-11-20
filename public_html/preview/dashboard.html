@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My dashboard | FinancialTherapy360</title>
+<meta name="description" content="Your FinancialTherapy360 dashboard: your financial picture, scenarios and action plan.">
+<link rel="stylesheet" href="assets/site.css?v=20261116f">
+</head>
+<body data-page="dashboard" data-demo-member="true">
+<div class="preview-banner" role="note">Customer dashboard preview: fictional sample data. Uploads, AI analysis and account connections are not connected yet.</div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap nav-wrap">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" width="264" height="72" alt="FinancialTherapy360"></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" aria-label="Primary">
+      <a href="how-it-works.html">How it works</a>
+      <a href="what-we-review.html">What we review</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="donations.html">Community Support</a>
+      <a href="contact.html">Contact</a>
+      <a class="btn btn-small btn-outline-light" href="login.html" data-signin>Sign in</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <div class="dash-head">
+        <div>
+          <h1>Hi Alex &mdash; here&rsquo;s where you stand</h1>
+          <p style="color:var(--ink-2)">Your sample financial picture. Meet Alex, a fictional person organizing income, spending and debt.</p>
+        </div>
+        <span class="chip">Sample data &middot; synthetic, November 2026</span>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><span>Monthly take-home</span><strong id="m-takehome">$5,400</strong><small id="m-takehome-note">Sample source</small></div>
+        <div class="metric"><span>After listed outgoings</span><strong id="m-cash">$1,000</strong><small>Before extra debt payment</small></div>
+        <div class="metric"><span>Card utilization</span><strong>66.7%</strong><small>One sample revolving account</small></div>
+      </div>
+      <div class="card">
+        <dl class="facts">
+          <div><dt>Living costs</dt><dd>$4,100/month, including a $110 insurance premium; excludes the card payment.</dd></div>
+          <div><dt>Card payment</dt><dd>$300/month fixed assumption, not a lender minimum.</dd></div>
+          <div><dt>Data quality</dt><dd>Synthetic examples. No customer facts have been verified.</dd></div>
+        </dl>
+        <p style="font-size:15px;margin-top:14px;margin-bottom:8px">Try a sample correction: the extracted take-home pay can be corrected, and the dashboard recalculates immediately.</p>
+        <div class="status-btns">
+          <button class="btn btn-ghost" id="income-original" aria-pressed="true">$5,400 original</button>
+          <button class="btn btn-ghost" id="income-corrected" aria-pressed="false">$5,600 correction</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2 style="font-size:21px">Debt payoff scenario</h2>
+        <p style="color:var(--ink-2);font-size:15px">Sample card balance of $8,000 at 24% APR with a $300 monthly payment. See what an extra payment could do. Projections, not verified savings.</p>
+        <div class="slider-wrap">
+          <label class="slider-label" for="extra-payment"><span>Extra monthly payment</span><strong id="extra-label">$150 extra per month</strong></label>
+          <input type="range" id="extra-payment" min="0" max="600" step="30" value="150">
+        </div>
+        <div class="compare">
+          <div class="card" style="border-color:var(--hairline)">
+            <em>Current sample plan</em>
+            <strong>$300/mo</strong>
+            <p>39 months &middot; $3,547 interest</p>
+          </div>
+          <div class="card" style="border-color:var(--teal)">
+            <em>With your scenario (<span id="scenario-payment">$450/mo</span>)</em>
+            <strong id="scenario-result">23 months &middot; $1,985 interest</strong>
+            <p id="scenario-diff">16 fewer months; $1,562 less interest.</p>
+          </div>
+        </div>
+        <p role="status" id="scenario-room" style="font-size:14px"></p>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2 style="font-size:21px">Your action plan</h2>
+        <div class="action-item">
+          <h3>1. Review the sample take-home pay</h3>
+          <p>The extracted amount can be corrected. Correcting it updates your available cash across the dashboard.</p>
+          <div class="status-btns">
+            <button class="btn btn-ghost" aria-pressed="true">To do</button>
+            <button class="btn btn-ghost" aria-pressed="false">In progress</button>
+            <button class="btn btn-ghost" aria-pressed="false">Done</button>
+          </div>
+        </div>
+        <div class="action-item">
+          <h3>2. Try an extra card payment</h3>
+          <p>Compare time, interest and remaining monthly room with transparent assumptions before deciding.</p>
+          <div class="status-btns">
+            <button class="btn btn-ghost" aria-pressed="true">To do</button>
+            <button class="btn btn-ghost" aria-pressed="false">In progress</button>
+            <button class="btn btn-ghost" aria-pressed="false">Done</button>
+          </div>
+        </div>
+        <div class="action-item">
+          <h3>3. Review the sample insurance premium</h3>
+          <p>The $110 monthly premium is part of listed living costs. Check what it covers and when the policy renews.</p>
+          <div class="status-btns">
+            <button class="btn btn-ghost" aria-pressed="true">To do</button>
+            <button class="btn btn-ghost" aria-pressed="false">In progress</button>
+            <button class="btn btn-ghost" aria-pressed="false">Done</button>
+          </div>
+        </div>
+        <p role="status" id="action-status" style="margin-top:12px"></p>
+      </div>
+
+      <h2 style="font-size:21px;margin-top:32px">Not the whole picture yet</h2>
+      <p style="color:var(--ink-2);font-size:15px">Missing information is shown as unknown, never treated as zero or &ldquo;no risk&rdquo;.</p>
+      <div class="grid grid-3">
+        <div class="unknown-card"><h3>Retirement</h3><p>No statement or employer match terms supplied. Unknown, not zero.</p></div>
+        <div class="unknown-card"><h3>Credit report</h3><p>Not supplied. No credit score or score prediction is available.</p></div>
+        <div class="unknown-card"><h3>Household sharing</h3><p>Not connected. No other adult&rsquo;s records or permissions are represented.</p></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2 style="font-size:21px">Your demo choices</h2>
+        <p style="color:var(--ink-2);font-size:15px" id="storage-status">Demo choices are saved in this browser only.</p>
+        <p style="color:var(--ink-2);font-size:15px">Only fictional choices are saved, on this device. No account is created, and nothing is shared or synchronized with a partner. Clearing browser storage resets the demo.</p>
+        <button class="btn btn-ghost" id="demo-reset">Reset demo</button>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="footer-tag">Helping everyone get more out of their finances.</p>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="how-it-works.html">How it works</a>
+      <a href="what-we-review.html">What we review</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="donations.html">Community Support</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Sign in</a>
+    </nav>
+    <p class="footer-note">FinancialTherapy360 is in development. This website is a design preview and uses fictional examples. It is not financial, tax, legal, insurance or investment advice. No accounts connected and no money moved.</p>
+    <p class="footer-note">&copy; 2026 FinancialTherapy360</p>
+  </div>
+</footer>
+<script src="assets/site.js?v=20261116f" defer></script>
+<script type="module" src="assets/dashboard.js"></script>
+</body>
+</html>

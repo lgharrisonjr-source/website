@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My account | FinancialTherapy360</title>
+<meta name="description" content="Manage your FinancialTherapy360 profile, permissions and privacy.">
+<link rel="stylesheet" href="assets/site.css?v=20261116f">
+</head>
+<body data-demo-member="true">
+<div class="preview-banner" role="note">Design preview with a fictional sample member. Accounts, permissions and privacy controls are not connected yet.</div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap nav-wrap">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" width="264" height="72" alt="FinancialTherapy360"></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" aria-label="Primary">
+      <a href="how-it-works.html">How it works</a>
+      <a href="what-we-review.html">What we review</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="donations.html">Community Support</a>
+      <a href="contact.html">Contact</a>
+      <a class="btn btn-small btn-outline-light" href="login.html" data-signin>Sign in</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <div class="dash-head">
+        <div>
+          <h1>Welcome, Alex Morgan</h1>
+          <p style="color:var(--ink-2)">Profile, permissions and privacy for your account.</p>
+        </div>
+        <span class="chip">Sample member &middot; fictional data</span>
+      </div>
+
+      <div class="grid grid-2" style="align-items:start">
+        <div class="card">
+          <h2 style="font-size:21px">Profile</h2>
+          <dl class="facts">
+            <div><dt>Name</dt><dd>Alex Morgan (sample)</dd></div>
+            <div><dt>Email</dt><dd>alex.sample@example.com</dd></div>
+            <div><dt>Account type</dt><dd>Individual</dd></div>
+            <div><dt>Security</dt><dd>Two-factor authentication <span class="chip chip-teal">Planned</span></dd></div>
+          </dl>
+        </div>
+
+        <div class="card">
+          <h2 style="font-size:21px">Household &amp; sharing</h2>
+          <p style="color:var(--ink-2);font-size:15px">Not connected. At launch you can invite another adult, who signs in and authorizes sharing separately. Household membership never opens your private records.</p>
+          <p style="color:var(--ink-2);font-size:15px;margin-bottom:0">Shared categories will appear here with their own permissions and a revoke control.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2 style="font-size:21px">Consent &amp; permissions</h2>
+        <p style="color:var(--ink-2);font-size:15px">Choose which categories FinancialTherapy360 can analyze. Optional categories can be declined. (Preview: choices save in this browser only.)</p>
+        <div class="consent-row">
+          <div class="consent-text"><h3>Income &amp; paycheck</h3><p>Used to understand take-home pay, deductions and benefits.</p></div>
+          <button class="toggle" role="switch" aria-checked="true" data-category="income" aria-label="Income and paycheck permission"></button>
+        </div>
+        <div class="consent-row">
+          <div class="consent-text"><h3>Expenses &amp; debt</h3><p>Used for spending patterns, balances, APRs and payoff scenarios.</p></div>
+          <button class="toggle" role="switch" aria-checked="true" data-category="expenses" aria-label="Expenses and debt permission"></button>
+        </div>
+        <div class="consent-row">
+          <div class="consent-text"><h3>Credit report</h3><p>Used to identify items worth reviewing on a report you provide.</p></div>
+          <button class="toggle" role="switch" aria-checked="false" data-category="credit" aria-label="Credit report permission"></button>
+        </div>
+        <div class="consent-row">
+          <div class="consent-text"><h3>Insurance</h3><p>Used to extract premiums, limits, deductibles and dates, and to flag gaps.</p></div>
+          <button class="toggle" role="switch" aria-checked="true" data-category="insurance" aria-label="Insurance permission"></button>
+        </div>
+        <div class="consent-row" style="border-bottom:0">
+          <div class="consent-text"><h3>Retirement</h3><p>Used to summarize contributions and employer match terms. (Planned)</p></div>
+          <button class="toggle" role="switch" aria-checked="false" data-category="retirement" aria-label="Retirement permission"></button>
+        </div>
+        <p role="status" id="consent-status" style="margin-top:12px"></p>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2 style="font-size:21px">Privacy &amp; your data</h2>
+        <p style="color:var(--ink-2);font-size:15px">Your information belongs to you. At launch you can download it or request deletion at any time. Requesting deletion stops new processing and starts the disclosed retention and deletion workflow.</p>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="demo-download">Download my data</button>
+          <button class="btn btn-ghost" id="demo-delete">Request deletion</button>
+        </div>
+        <p role="status" id="privacy-status" style="margin-top:12px"></p>
+      </div>
+
+      <div class="btn-row" style="margin-top:20px">
+        <button class="btn btn-ghost" id="demo-signout">Sign out (demo)</button>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="footer-tag">Helping everyone get more out of their finances.</p>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="how-it-works.html">How it works</a>
+      <a href="what-we-review.html">What we review</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="donations.html">Community Support</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Sign in</a>
+    </nav>
+    <p class="footer-note">FinancialTherapy360 is in development. This website is a design preview and uses fictional examples. It is not financial, tax, legal, insurance or investment advice. Terms and privacy notices will be published at launch.</p>
+    <p class="footer-note">&copy; 2026 FinancialTherapy360</p>
+  </div>
+</footer>
+<script src="assets/site.js?v=20261116f" defer></script>
+</body>
+</html>

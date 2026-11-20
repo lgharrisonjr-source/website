@@ -1,0 +1,5 @@
+AuthType Basic
+AuthName 'Restricted Access'
+AuthUserFile /home/u157864251/domains/financialtherapy360.com/public_html/.htpasswd
+Require valid-user
+Options -Indexes

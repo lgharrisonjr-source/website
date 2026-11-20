@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 120" role="img" aria-label="FinancialTherapy360 logo concept: monogram">
+  <rect x="14" y="14" width="92" height="92" rx="22" fill="#0e2a47"/>
+  <text x="60" y="77" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="42" fill="#ffffff">FT</text>
+  <circle cx="99" cy="21" r="17" fill="#2f8f83"/>
+  <text x="99" y="26" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="11.5" fill="#ffffff">360</text>
+  <text x="132" y="70" font-family="Georgia, 'Times New Roman', serif" font-size="30" letter-spacing="-0.5" fill="#0e2a47">FinancialTherapy<tspan fill="#2f8f83">360</tspan></text>
+</svg>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team console preview | FinancialTherapy360</title>
+<meta name="description" content="Internal management console preview for the FinancialTherapy360 team.">
+<link rel="stylesheet" href="../assets/site.css?v=20261116f">
+</head>
+<body>
+<div class="preview-banner" role="note">Internal management preview: fictional data, not connected to customer records. At launch this area is restricted to authorized team roles, and all privileged activity is logged.</div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap nav-wrap">
+    <a class="brand" href="../index.html"><img src="../assets/logo.svg" width="264" height="72" alt="FinancialTherapy360"></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" aria-label="Primary">
+      <a href="../index.html">Customer site</a>
+      <a href="index.html" aria-current="page">Team console</a>
+    </nav>
+  </div>
+</header>
+<div class="internal-head">
+  <div class="wrap">
+    <h1>Team console</h1>
+    <p class="admin-boundary">Separate admin URL preview. This is not role-restricted access: only the shared preview gate is active. Real administrator permissions are not connected.</p>
+    <p>Internal management view for reviewers, support and administrators. Preview with fictional cases.</p>
+  </div>
+</div>
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <div class="dash-head">
+        <h2 style="margin-bottom:0">Operations at a glance</h2>
+        <span class="chip">Fictional metrics</span>
+      </div>
+      <div class="metrics">
+        <div class="metric"><span>Analyses completed (sample)</span><strong>128</strong><small>Trailing 30 days, fictional</small></div>
+        <div class="metric"><span>Average review turnaround</span><strong>1.8 days</strong><small>Case assignment to decision, fictional</small></div>
+        <div class="metric"><span>Recommendations accepted</span><strong>64%</strong><small>Of reviewed recommendations, fictional</small></div>
+      </div>
+
+      <h2 style="font-size:21px;margin-top:32px">Review queue</h2>
+      <p style="color:var(--ink-2);font-size:15px">Reviewers see only assigned cases, within their approved scope and qualifications.</p>
+      <div class="queue-wrap">
+        <table class="queue-table">
+          <thead>
+            <tr><th scope="col">Case</th><th scope="col">Type</th><th scope="col">Category</th><th scope="col">Flag</th><th scope="col">Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Case">#1042</td><td data-label="Type">Household review</td><td data-label="Category">Insurance</td><td data-label="Flag">Low-confidence extraction</td><td data-label="Status"><span class="badge badge-wait">Awaiting reviewer</span></td></tr>
+            <tr><td data-label="Case">#1041</td><td data-label="Type">Individual</td><td data-label="Category">Debt &amp; credit</td><td data-label="Flag">Contradictory balances</td><td data-label="Status"><span class="badge badge-progress">In review</span></td></tr>
+            <tr><td data-label="Case">#1039</td><td data-label="Type">Individual</td><td data-label="Category">Income</td><td data-label="Flag">Missing pay period</td><td data-label="Status"><span class="badge badge-info">Customer asked to clarify</span></td></tr>
+            <tr><td data-label="Case">#1037</td><td data-label="Type">Household</td><td data-label="Category">Retirement</td><td data-label="Flag">Regulated topic</td><td data-label="Status"><span class="badge badge-escalate">Escalated to licensed partner</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card" style="margin-top:24px">
+        <div class="dash-head" style="margin-bottom:8px">
+          <h2 style="font-size:21px;margin-bottom:0">Finding review &mdash; case #1041 (sample)</h2>
+          <span class="chip">Demo controls</span>
+        </div>
+        <dl class="facts">
+          <div><dt>Finding</dt><dd>Card APR of 24% is above the typical range for the sample profile.</dd></div>
+          <div><dt>Evidence</dt><dd>Sample card statement, page 1, extracted rate field. Original value retained.</dd></div>
+          <div><dt>Confidence</dt><dd>Medium. Extraction validated; profile comparison is estimated and labeled.</dd></div>
+          <div><dt>Draft recommendation</dt><dd>Consider directing extra monthly budget to this balance. Projected, not verified savings.</dd></div>
+        </dl>
+        <div class="status-btns" style="margin-top:14px">
+          <button class="btn btn-ghost" data-review-action aria-pressed="false">Approve</button>
+          <button class="btn btn-ghost" data-review-action aria-pressed="false">Correct</button>
+          <button class="btn btn-ghost" data-review-action aria-pressed="false">Escalate</button>
+        </div>
+        <p role="status" id="review-status" style="margin-top:12px"></p>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:24px">
+        <div class="card"><h3>Reviewer console</h3><p>Assigned cases, document evidence, corrections, approval and escalation, all recorded for audit.</p></div>
+        <div class="card"><h3>Customer support</h3><p>Limited account and workflow metadata. Sensitive documents require explicit, audited authorization.</p></div>
+        <div class="card"><h3>Administration</h3><p>Configuration and access under least-privilege controls. Every privileged action is logged.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="footer-tag">Helping everyone get more out of their finances.</p>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="../index.html">Customer site</a>
+      <a href="index.html">Team console</a>
+    </nav>
+    <p class="footer-note">Internal preview with fictional cases and metrics. Role-based access (reviewer, support, administrator) is enforced when the console is connected at launch. Not financial, tax, legal, insurance or investment advice.</p>
+    <p class="footer-note">&copy; 2026 FinancialTherapy360</p>
+  </div>
+</footer>
+<script src="../assets/site.js?v=20261116f" defer></script>
+</body>
+</html>
